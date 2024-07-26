@@ -17,7 +17,7 @@ function Sidebar() {
               <li><Link to="/expenses">Expenses</Link></li>
               <li><Link to="/earnings">Earnings</Link></li>
               <li><Link to="/savings">Savings</Link></li>
-              <li><Link to="/budgets">Budgets</Link></li>
+              <li><Link to="/budgets">Upcommings </Link></li>
               <li><Link to="/settings">Go to Settings</Link></li>
             </ul>
           </div>
