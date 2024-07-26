@@ -33,8 +33,14 @@ const Settings = () => {
         ? Math.ceil((now - lastUpdated) / (1000 * 60 * 60 * 24))
         : 3;
 
-      if (storedCurrencies.length && (diffDays < 3 || !lastUpdated)) {
-        setCurrencies(storedCurrencies.map(item => item.currency));
+      let initialCurrencies = storedCurrencies.map(item => item.currency);
+
+      if (!initialCurrencies.includes('USD')) {
+        initialCurrencies = ['USD', ...initialCurrencies];
+      }
+
+      if (initialCurrencies.length && (diffDays < 3 || !lastUpdated)) {
+        setCurrencies(initialCurrencies);
         setExchangeRates(
           storedRates.reduce((acc, rate) => {
             acc[rate.currency] = rate.rate;
@@ -54,7 +60,7 @@ const Settings = () => {
           acc[rate.currency] = rate.rate;
           return acc;
         }, {}));
-        setCurrencies(storedCurrencies.map(item => item.currency));
+        setCurrencies(initialCurrencies);
       }
     };
 

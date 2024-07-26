@@ -211,8 +211,7 @@ function Expenses() {
                 <ul className="mt-2 flex gap-8">
                     {currencyOptions.map(({ value, label }) => (
                         <li key={value} className="p-2 flex items-center justify-between">
-                            <span className="font-medium">{label}</span>
-                            <span className="text-gray-500">{calculateTotal(value)} {value}</span>
+                            <span className="text-gray-700">{calculateTotal(value)} {value}</span>
                         </li>
                     ))}
                 </ul>
@@ -220,8 +219,7 @@ function Expenses() {
             <div className="mt-6">
                 <h2 className="text-lg font-semibold">Total Balance in USD</h2>
                 <div className="p-2 flex items-center justify-between">
-                    <span className="font-medium">USD</span>
-                    <span className="text-gray-500">{calculateTotalInUSD()} USD</span>
+                    <span className="text-gray-700">{calculateTotalInUSD()} USD</span>
                 </div>
             </div>
         </div>
