@@ -25,6 +25,14 @@ export function useTransactions() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ transactions: updatedTransactions }));
   };
 
+  const updateTransaction = (id: string, updatedData: Omit<Transaction, 'id'>) => {
+    const updatedTransactions = transactions.map(transaction => 
+      transaction.id === id ? { ...updatedData, id } : transaction
+    );
+    setTransactions(updatedTransactions);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ transactions: updatedTransactions }));
+  };
+
   const deleteTransaction = (id: string) => {
     const updatedTransactions = transactions.filter(t => t.id !== id);
     setTransactions(updatedTransactions);
@@ -48,6 +56,7 @@ export function useTransactions() {
   return {
     transactions,
     addTransaction,
+    updateTransaction,
     deleteTransaction,
     getBalance,
     getTotalLoans,

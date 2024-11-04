@@ -6,7 +6,7 @@ import { useTransactions } from './hooks/useTransactions';
 import { Wallet } from 'lucide-react';
 
 function App() {
-  const { transactions, addTransaction, deleteTransaction, getBalance, getTotalLoans } = useTransactions();
+  const { transactions, addTransaction, updateTransaction, deleteTransaction, getBalance, getTotalLoans } = useTransactions();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -39,6 +39,7 @@ function App() {
             <TransactionList
               transactions={transactions}
               onDelete={deleteTransaction}
+              onUpdate={updateTransaction}
             />
           </div>
         </div>

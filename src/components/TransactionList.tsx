@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Transaction } from '../types';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Edit2 } from 'lucide-react';
+import { TransactionForm } from './TransactionForm';
 
 interface TransactionListProps {
   transactions: Transaction[];
   onDelete: (id: string) => void;
+  onUpdate: (id: string, data: Omit<Transaction, 'id'>) => void;
 }
 
-export function TransactionList({ transactions, onDelete }: TransactionListProps) {
+export function TransactionList({ transactions, onDelete, onUpdate }: TransactionListProps) {
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'income':
@@ -18,6 +22,13 @@ export function TransactionList({ transactions, onDelete }: TransactionListProps
         return 'text-blue-600';
       default:
         return 'text-gray-600';
+    }
+  };
+
+  const handleUpdate = (data: Omit<Transaction, 'id'>) => {
+    if (editingId) {
+      onUpdate(editingId, data);
+      setEditingId(null);
     }
   };
 
@@ -37,33 +48,54 @@ export function TransactionList({ transactions, onDelete }: TransactionListProps
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {transactions.map((transaction) => (
-              <tr key={transaction.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(transaction.date).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <span className={`capitalize ${getTypeColor(transaction.type)}`}>
-                    {transaction.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {transaction.description}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {transaction.category}
-                </td>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${getTypeColor(transaction.type)}`}>
-                  ${transaction.amount.toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <button
-                    onClick={() => onDelete(transaction.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment key={transaction.id}>
+                <tr className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(transaction.date).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className={`capitalize ${getTypeColor(transaction.type)}`}>
+                      {transaction.type}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {transaction.description}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {transaction.category}
+                  </td>
+                  <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${getTypeColor(transaction.type)}`}>
+                    ${transaction.amount.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => setEditingId(transaction.id)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(transaction.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {editingId === transaction.id && (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-4">
+                      <TransactionForm
+                        onSubmit={handleUpdate}
+                        initialData={transaction}
+                        isEditing={true}
+                      />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
