@@ -1,1 +1,0 @@
-# LocalStorageTable Examples
